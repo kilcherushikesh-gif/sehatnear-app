@@ -149,7 +149,7 @@ async function fetchLiveHospitals(lat,lng,radiusMeters=6000){
   for (const mirror of OVERPASS_MIRRORS) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(()=>controller.abort(), 8000);
+      const timeoutId = setTimeout(()=>controller.abort(), 12000);
       const res = await fetch(mirror, {
         method:"POST",
         headers:{ "Content-Type":"application/x-www-form-urlencoded" },
@@ -161,7 +161,7 @@ async function fetchLiveHospitals(lat,lng,radiusMeters=6000){
       data = await res.json();
       break;
     } catch(err) {
-      lastError = err.name === 'AbortError' ? new Error('Server took too long to respond') : err;
+      lastError = err.name === 'AbortError' ? new Error('Server took too long to respond: '+mirror) : new Error((err.message||'fetch failed')+' — '+mirror);
     }
   }
   if (!data) throw lastError || new Error("All map data servers are currently unreachable. Please try again in a minute.");
