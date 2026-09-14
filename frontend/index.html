@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SehatNear — Hospital Finder Prototype</title>
+<title>SehatNear — Live Hospital Finder</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0E6B5C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,193 +11,85 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#EEF3F1;
-    --surface:#FFFFFF;
-    --ink:#12302E;
-    --ink-soft:#4B615F;
-    --ink-faint:#7C8E8B;
-    --teal:#0E6B5C;
-    --teal-dark:#084A40;
-    --teal-wash:#E3EEEA;
-    --red:#B3402A;
-    --red-wash:#F5E4DF;
-    --line:#DCE3E0;
-    --amber:#8A5A16;
-    --amber-wash:#F2E7D3;
+    --bg:#EEF3F1; --surface:#FFFFFF; --ink:#12302E; --ink-soft:#4B615F; --ink-faint:#7C8E8B;
+    --teal:#0E6B5C; --teal-dark:#084A40; --teal-wash:#E3EEEA;
+    --red:#B3402A; --red-wash:#F5E4DF; --line:#DCE3E0;
+    --amber:#8A5A16; --amber-wash:#F2E7D3;
+    --gray-wash:#EDEEEC;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    font-family:'Public Sans', sans-serif;
-    color:var(--ink);
-    display:flex;
-    justify-content:center;
-    padding:28px 12px;
-    min-height:100vh;
-  }
+  body{ margin:0; background:var(--bg); font-family:'Public Sans', sans-serif; color:var(--ink); display:flex; justify-content:center; padding:28px 12px; min-height:100vh; }
   .rig{ display:flex; flex-direction:column; align-items:center; gap:14px; }
-  .brandline{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:15px;
-    color:var(--ink-soft);
-    letter-spacing:0.01em;
-  }
-  .phone{
-    width:390px;
-    max-width:92vw;
-    height:770px;
-    background:var(--surface);
-    border-radius:38px;
-    border:1px solid var(--line);
-    box-shadow:0 1px 0 rgba(18,48,46,0.03);
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-  }
-  .notch{
-    width:120px; height:22px; background:var(--ink);
-    border-radius:0 0 14px 14px; margin:0 auto; flex:0 0 auto;
-  }
-  .screen{
-    flex:1;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    scrollbar-width:none;
-  }
-  .screen::-webkit-scrollbar{display:none;}
-  .pad{ padding:20px 20px 12px; }
-
+  .brandline{ font-family:'Fraunces', serif; font-weight:600; font-size:15px; color:var(--ink-soft); }
+  .phone{ width:390px; max-width:92vw; height:770px; background:var(--surface); border-radius:38px; border:1px solid var(--line); overflow:hidden; position:relative; display:flex; flex-direction:column; }
+  .notch{ width:120px; height:22px; background:var(--ink); border-radius:0 0 14px 14px; margin:0 auto; flex:0 0 auto; }
+  .screen{ flex:1; overflow-y:auto; display:flex; flex-direction:column; scrollbar-width:none; }
+  .screen::-webkit-scrollbar{ display:none; }
   h1,h2,h3{ font-family:'Fraunces', serif; font-weight:600; margin:0; color:var(--ink); }
   p{ margin:0; }
-
-  .btn{
-    border:none; cursor:pointer; font-family:'Public Sans', sans-serif;
-    font-weight:600; font-size:14.5px; border-radius:12px;
-    padding:13px 16px; display:flex; align-items:center; justify-content:center; gap:8px;
-  }
+  .btn{ border:none; cursor:pointer; font-family:'Public Sans', sans-serif; font-weight:600; font-size:14.5px; border-radius:12px; padding:13px 16px; display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; }
   .btn-primary{ background:var(--teal); color:#fff; }
-  .btn-primary:active{ background:var(--teal-dark); }
   .btn-ghost{ background:var(--teal-wash); color:var(--teal-dark); }
   .btn-red{ background:var(--red); color:#fff; }
   .btn-outline{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+  .btn-disabled{ background:var(--gray-wash); color:var(--ink-faint); cursor:default; }
   .btn-sm{ padding:9px 12px; font-size:13px; border-radius:10px; }
   .link{ color:var(--teal); font-weight:600; cursor:pointer; }
-
-  /* ---- Permission screen ---- */
-  .pin-badge{
-    width:64px;height:64px;border-radius:50%;background:var(--teal-wash);
-    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
-  }
-  .pin-badge svg{ width:28px;height:28px; }
-
-  /* ---- Home header ---- */
-  .loc-row{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 20px; border-bottom:1px solid var(--line);
-  }
+  .pin-badge{ width:64px;height:64px;border-radius:50%;background:var(--teal-wash); display:flex;align-items:center;justify-content:center;margin-bottom:18px; }
+  .loc-row{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--line); }
   .loc-left{ display:flex; align-items:center; gap:8px; }
   .loc-left .city{ font-weight:600; font-size:15px; }
   .loc-left .sub{ font-size:12px; color:var(--ink-faint); }
-
-  .sos{
-    margin:18px 20px 6px;
-    background:var(--red);
-    border-radius:18px;
-    padding:20px;
-    color:#fff;
-    display:flex; flex-direction:column; gap:10px; cursor:pointer;
-  }
+  .sos{ margin:18px 20px 6px; background:var(--red); border-radius:18px; padding:20px; color:#fff; display:flex; flex-direction:column; gap:10px; cursor:pointer; }
   .sos .row{ display:flex; align-items:center; gap:10px; }
   .sos .label{ font-family:'Fraunces',serif; font-weight:600; font-size:19px; }
   .sos .desc{ font-size:12.5px; opacity:0.92; line-height:1.5; }
-
-  .grid2{
-    display:grid; grid-template-columns:1fr 1fr; gap:10px;
-    padding:14px 20px 6px;
-  }
-  .tile{
-    background:var(--surface); border:1px solid var(--line); border-radius:16px;
-    padding:16px 14px; display:flex; flex-direction:column; gap:10px; cursor:pointer;
-  }
-  .tile .ic{
-    width:36px;height:36px;border-radius:10px;background:var(--teal-wash);
-    display:flex;align-items:center;justify-content:center;
-  }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:14px 20px 6px; }
+  .tile{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px 14px; display:flex; flex-direction:column; gap:10px; cursor:pointer; }
+  .tile .ic{ width:36px;height:36px;border-radius:10px;background:var(--teal-wash); display:flex;align-items:center;justify-content:center; }
   .tile .t{ font-weight:600; font-size:13.5px; }
   .tile .s{ font-size:11.5px; color:var(--ink-faint); }
-
-  .section-label{
-    padding:18px 20px 8px; font-size:12.5px; font-weight:600; color:var(--ink-faint);
-  }
-
-  /* ---- hospital card ---- */
-  .hcard{
-    margin:0 20px 12px; border:1px solid var(--line); border-radius:16px;
-    padding:14px 16px; background:var(--surface); display:flex; flex-direction:column; gap:10px;
-    cursor:pointer;
-  }
+  .section-label{ padding:18px 20px 8px; font-size:12.5px; font-weight:600; color:var(--ink-faint); }
+  .hcard{ margin:0 20px 12px; border:1px solid var(--line); border-radius:16px; padding:14px 16px; background:var(--surface); display:flex; flex-direction:column; gap:10px; }
   .hcard .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
   .hcard .name{ font-family:'Fraunces',serif; font-weight:600; font-size:15.5px; line-height:1.3; }
   .hcard .area{ font-size:12px; color:var(--ink-faint); margin-top:2px; }
   .hcard .dist{ font-size:12.5px; font-weight:600; color:var(--teal-dark); white-space:nowrap; }
-  .badge{
-    font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px;
-    background:var(--amber-wash); color:var(--amber); align-self:flex-start;
-  }
+  .badge{ font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px; align-self:flex-start; }
+  .badge.er{ background:var(--amber-wash); color:var(--amber); }
+  .badge.unconfirmed{ background:var(--gray-wash); color:var(--ink-faint); }
   .hcard .actions{ display:flex; gap:8px; }
   .hcard .actions .btn-sm{ flex:1; }
-
-  .backbar{
-    display:flex; align-items:center; gap:10px; padding:16px 20px 6px;
-  }
+  .backbar{ display:flex; align-items:center; gap:10px; padding:16px 20px 6px; }
   .backbar .bk{ cursor:pointer; display:flex; align-items:center; justify-content:center; width:30px;height:30px;border-radius:9px; background:var(--teal-wash); }
-
-  .searchbox{
-    margin:6px 20px 4px; display:flex; align-items:center; gap:10px;
-    border:1px solid var(--line); border-radius:12px; padding:11px 14px; background:var(--surface);
-  }
+  .searchbox{ margin:6px 20px 4px; display:flex; align-items:center; gap:10px; border:1px solid var(--line); border-radius:12px; padding:11px 14px; background:var(--surface); }
   .searchbox input{ border:none; outline:none; flex:1; font-size:14px; font-family:'Public Sans',sans-serif; background:transparent; color:var(--ink); }
-
-  .disclaimer{
-    margin:16px 20px; background:var(--red-wash); border:1px solid #E3B7A9; border-radius:14px;
-    padding:13px 15px; font-size:12px; color:var(--red); line-height:1.55;
-  }
-
+  .disclaimer{ margin:16px 20px; background:var(--red-wash); border:1px solid #E3B7A9; border-radius:14px; padding:13px 15px; font-size:12px; color:var(--red); line-height:1.55; }
+  .infobox{ margin:16px 20px; background:var(--teal-wash); border-radius:14px; padding:13px 15px; font-size:12px; color:var(--teal-dark); line-height:1.55; }
   .detail-hero{ padding:20px; border-bottom:1px solid var(--line); }
   .chiprow{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
   .chip{ font-size:11.5px; background:var(--teal-wash); color:var(--teal-dark); padding:5px 10px; border-radius:999px; }
+  .chip.muted{ background:var(--gray-wash); color:var(--ink-faint); }
   .infoblock{ padding:16px 20px; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:10px; }
-  .infoblock .row{ display:flex; justify-content:space-between; font-size:13.5px; }
+  .infoblock .row{ display:flex; justify-content:space-between; font-size:13.5px; gap:12px; }
   .infoblock .k{ color:var(--ink-faint); }
   .infoblock .v{ font-weight:600; text-align:right; }
-
-  .navbar{
-    display:flex; border-top:1px solid var(--line); background:var(--surface); flex:0 0 auto;
-  }
-  .navbtn{
-    flex:1; padding:11px 4px 13px; display:flex; flex-direction:column; align-items:center; gap:4px;
-    cursor:pointer; color:var(--ink-faint); font-size:10.5px; font-weight:600;
-  }
+  .navbar{ display:flex; border-top:1px solid var(--line); background:var(--surface); flex:0 0 auto; }
+  .navbtn{ flex:1; padding:11px 4px 13px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; color:var(--ink-faint); font-size:10.5px; font-weight:600; }
   .navbtn.active{ color:var(--teal-dark); }
   .navbtn.emergency{ color:var(--red); }
-
   .citylist{ display:flex; flex-direction:column; gap:10px; padding:6px 20px 20px; }
-  .cityopt{
-    border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .cityopt.sel{ border-color:var(--teal); background:var(--teal-wash); }
-
+  .cityopt{ border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
   .footnote{ padding:14px 20px 4px; font-size:11px; color:var(--ink-faint); line-height:1.6; }
+  .loader{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:60px 20px; text-align:center; }
+  .spinner{ width:28px; height:28px; border-radius:50%; border:3px solid var(--teal-wash); border-top-color:var(--teal); animation:spin 0.8s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .errbox{ margin:16px 20px; background:#FCEBEB; border:1px solid #F0C0C0; border-radius:14px; padding:16px; font-size:13px; color:var(--red); display:flex; flex-direction:column; gap:10px; }
 </style>
 </head>
 <body>
 <div class="rig">
-  <div class="brandline">SehatNear — prototype walkthrough</div>
+  <div class="brandline">SehatNear — live data (OpenStreetMap)</div>
   <div class="phone">
     <div class="notch"></div>
     <div id="screen" class="screen"></div>
@@ -209,7 +101,6 @@
 const ICONS = {
   pin: '<svg viewBox="0 0 24 24" fill="none" stroke="#0E6B5C" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>',
   hospital: '<svg viewBox="0 0 24 24" fill="none" stroke="#0E6B5C" stroke-width="1.8"><rect x="4" y="6" width="16" height="15" rx="1.5"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M12 10v6M9 13h6"/></svg>',
-  doctor: '<svg viewBox="0 0 24 24" fill="none" stroke="#0E6B5C" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="#0E6B5C" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg>',
   siren: '<svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M12 3v3M4 20h16M6 20a6 6 0 0 1 12 0"/><path d="M12 9v3l2 1.3"/></svg>',
   chevronLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="#0E6B5C" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>',
@@ -218,76 +109,81 @@ const ICONS = {
   navSiren: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M4 20h16M6 20a6 6 0 0 1 12 0"/></svg>',
   navSearch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.5-4.5"/></svg>',
   call: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h4l2 5-3 2a11 11 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2C10.5 20 4 13.5 4 5a2 2 0 0 1 2-2z"/></svg>',
-  map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>',
-  dept: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v8M8 12h8"/><circle cx="12" cy="12" r="9"/></svg>'
+  map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>'
 };
 
-const CITIES = {
+// Quick-pick fallback centres if the person skips typing a city.
+const QUICK_CITIES = {
   pune:  { label:"Pune, Maharashtra",  lat:18.5204, lng:73.8567 },
   mumbai:{ label:"Mumbai, Maharashtra", lat:19.0760, lng:72.8777 },
   delhi: { label:"New Delhi, Delhi",    lat:28.6139, lng:77.2090 }
 };
 
-const HOSPITALS = {
-  pune: [
-    { name:"Sahyadri City Care Hospital", area:"Shivajinagar", lat:18.5308, lng:73.8474, hours:"24x7 emergency", er:true, depts:["Emergency","Cardiology","Orthopaedics","General medicine"], phone:"020-6120-1000" },
-    { name:"Ruby Horizon Multispecialty Hospital", area:"Kalyani Nagar", lat:18.5474, lng:73.9028, hours:"24x7 emergency", er:true, depts:["Emergency","Neurology","Paediatrics","ICU"], phone:"020-6120-1400" },
-    { name:"Deccan Sunrise Hospital", area:"Deccan Gymkhana", lat:18.5158, lng:73.8412, hours:"OPD 8am–9pm", er:false, depts:["General medicine","Dermatology","ENT"], phone:"020-6120-1800" },
-    { name:"Wakad Community Hospital", area:"Wakad", lat:18.5978, lng:73.7610, hours:"24x7 emergency", er:true, depts:["Emergency","Maternity","General surgery"], phone:"020-6120-2200" },
-    { name:"Camp Central Hospital", area:"Camp", lat:18.5089, lng:73.8797, hours:"OPD 9am–8pm", er:false, depts:["General medicine","Physiotherapy","Diagnostics"], phone:"020-6120-2600" }
-  ],
-  mumbai: [
-    { name:"Marine Line General Hospital", area:"Marine Lines", lat:18.9457, lng:72.8236, hours:"24x7 emergency", er:true, depts:["Emergency","Cardiology","Trauma care"], phone:"022-6130-1000" },
-    { name:"Andheri Metro Hospital", area:"Andheri East", lat:19.1197, lng:72.8697, hours:"24x7 emergency", er:true, depts:["Emergency","Orthopaedics","ICU"], phone:"022-6130-1400" },
-    { name:"Bandra Seaside Hospital", area:"Bandra West", lat:19.0596, lng:72.8295, hours:"OPD 8am–9pm", er:false, depts:["General medicine","Gynaecology","Dermatology"], phone:"022-6130-1800" },
-    { name:"Powai Lakeview Hospital", area:"Powai", lat:19.1176, lng:72.9060, hours:"24x7 emergency", er:true, depts:["Emergency","Paediatrics","General surgery"], phone:"022-6130-2200" },
-    { name:"Dadar Central Hospital", area:"Dadar", lat:19.0178, lng:72.8478, hours:"OPD 9am–8pm", er:false, depts:["General medicine","ENT","Physiotherapy"], phone:"022-6130-2600" }
-  ],
-  delhi: [
-    { name:"Connaught Care Hospital", area:"Connaught Place", lat:28.6315, lng:77.2167, hours:"24x7 emergency", er:true, depts:["Emergency","Cardiology","Neurology"], phone:"011-6140-1000" },
-    { name:"Saket Multispecialty Hospital", area:"Saket", lat:28.5245, lng:77.2066, hours:"24x7 emergency", er:true, depts:["Emergency","Oncology","ICU"], phone:"011-6140-1400" },
-    { name:"Dwarka Community Hospital", area:"Dwarka", lat:28.5921, lng:77.0460, hours:"OPD 8am–9pm", er:false, depts:["General medicine","Maternity","Paediatrics"], phone:"011-6140-1800" },
-    { name:"Rohini Sunrise Hospital", area:"Rohini", lat:28.7041, lng:77.1025, hours:"24x7 emergency", er:true, depts:["Emergency","Orthopaedics","General surgery"], phone:"011-6140-2200" },
-    { name:"Lajpat Nagar General Hospital", area:"Lajpat Nagar", lat:28.5677, lng:77.2431, hours:"OPD 9am–8pm", er:false, depts:["General medicine","Dermatology","Diagnostics"], phone:"011-6140-2600" }
-  ]
+const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
+const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
+
+let state = {
+  view:"permission", cityLabel:null, userLat:null, userLng:null,
+  hospitals:[], loading:false, loadError:null, selected:null, query:"", geocodeQuery:""
 };
 
-// Point this at your deployed backend (server-free.js or server.js) to replace
-// the mock HOSPITALS data below with live results, e.g.:
-// const BACKEND_URL = "https://your-app.onrender.com";
-// Then call: fetch(`${BACKEND_URL}/api/hospitals/nearby?lat=${lat}&lng=${lng}`)
-// and map the response's `results` array into the same shape hospitalsSorted() returns.
-// Left blank here so the prototype keeps working standalone with no backend running.
-const BACKEND_URL = "";
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371, toRad=d=>d*Math.PI/180;
+  const dLat=toRad(lat2-lat1), dLng=toRad(lng2-lng1);
+  const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+  return R*2*Math.asin(Math.sqrt(a));
+}
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+function directionsUrl(lat,lng){
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+}
+
+async function fetchLiveHospitals(lat,lng,radiusMeters=6000){
+  const query = `[out:json][timeout:25];(node["amenity"="hospital"](around:${radiusMeters},${lat},${lng});way["amenity"="hospital"](around:${radiusMeters},${lat},${lng});relation["amenity"="hospital"](around:${radiusMeters},${lat},${lng}););out center tags;`;
+  const res = await fetch(OVERPASS_URL, {
+    method:"POST",
+    headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+    body:"data="+encodeURIComponent(query)
   });
+  if(!res.ok) throw new Error("Map data service returned an error ("+res.status+")");
+  const data = await res.json();
+  const elements = data.elements || [];
+  return elements.map(el=>{
+    const hLat = el.lat ?? el.center?.lat;
+    const hLng = el.lon ?? el.center?.lon;
+    const tags = el.tags || {};
+    const addrParts = [tags["addr:housenumber"], tags["addr:street"], tags["addr:suburb"] || tags["addr:city"]].filter(Boolean);
+    return {
+      id: `${el.type}/${el.id}`,
+      name: tags.name || "Unnamed hospital (mapped, not named)",
+      lat: hLat, lng: hLng,
+      address: addrParts.join(", ") || null,
+      phone: tags.phone || tags["contact:phone"] || null,
+      emergency: tags.emergency === "yes" ? true : (tags.emergency === "no" ? false : null),
+      hours: tags.opening_hours || null,
+      website: tags.website || tags["contact:website"] || null
+    };
+  }).filter(h => h.lat && h.lng);
 }
 
-let state = { view:"permission", cityKey:null, userLat:null, userLng:null, selected:null, query:"" };
-
-function haversine(lat1, lng1, lat2, lng2){
-  const R = 6371, toRad = d => d*Math.PI/180;
-  const dLat = toRad(lat2-lat1), dLng = toRad(lng2-lng1);
-  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
-  return R * 2 * Math.asin(Math.sqrt(a));
+function hospitalsSorted(){
+  return state.hospitals
+    .map(h => ({...h, dist: haversine(state.userLat, state.userLng, h.lat, h.lng)}))
+    .sort((a,b)=>a.dist-b.dist);
 }
 
-function nearestCity(lat,lng){
-  let best=null, bestD=Infinity;
-  for(const key in CITIES){
-    const d = haversine(lat,lng,CITIES[key].lat,CITIES[key].lng);
-    if(d<bestD){ bestD=d; best=key; }
+async function loadHospitals(){
+  state.loading = true; state.loadError = null; render();
+  try{
+    const results = await fetchLiveHospitals(state.userLat, state.userLng);
+    state.hospitals = results;
+    state.loading = false;
+    render();
+  }catch(err){
+    state.loading = false;
+    state.loadError = err.message || "Could not load live hospital data.";
+    render();
   }
-  return best;
-}
-
-function hospitalsSorted(cityKey, userLat, userLng){
-  return HOSPITALS[cityKey].map(h=>({
-    ...h, dist: haversine(userLat,userLng,h.lat,h.lng)
-  })).sort((a,b)=>a.dist-b.dist);
 }
 
 function goto(view, extra){
@@ -297,69 +193,97 @@ function goto(view, extra){
 }
 
 function requestLocation(){
-  const el = document.getElementById('screen');
   if(!navigator.geolocation){ goto('changeLocation', {locateFailed:true}); return; }
   navigator.geolocation.getCurrentPosition(
     pos=>{
-      const lat = pos.coords.latitude, lng = pos.coords.longitude;
-      const city = nearestCity(lat,lng);
-      goto('home', { cityKey:city, userLat:lat, userLng:lng });
+      state.userLat = pos.coords.latitude;
+      state.userLng = pos.coords.longitude;
+      state.cityLabel = "Your current location";
+      goto('home');
+      loadHospitals();
     },
     ()=>{ goto('changeLocation', {locateFailed:true}); },
     { timeout:6000 }
   );
 }
 
-function chooseCity(key){
-  const c = CITIES[key];
-  goto('home', { cityKey:key, userLat:c.lat, userLng:c.lng });
+function chooseQuickCity(key){
+  const c = QUICK_CITIES[key];
+  state.userLat = c.lat; state.userLng = c.lng; state.cityLabel = c.label;
+  goto('home');
+  loadHospitals();
+}
+
+async function geocodeAndGo(){
+  const q = document.getElementById('geocodeInput').value.trim();
+  if(!q) return;
+  const box = document.getElementById('geocodeStatus');
+  box.textContent = "Searching...";
+  try{
+    const url = `${NOMINATIM_URL}?q=${encodeURIComponent(q+", India")}&format=json&limit=1`;
+    const res = await fetch(url, { headers: { "Accept":"application/json" } });
+    const data = await res.json();
+    if(!data.length){ box.textContent = "Couldn't find that place — try a nearby bigger town."; return; }
+    state.userLat = parseFloat(data[0].lat);
+    state.userLng = parseFloat(data[0].lon);
+    state.cityLabel = data[0].display_name.split(",").slice(0,2).join(",");
+    goto('home');
+    loadHospitals();
+  }catch(err){
+    box.textContent = "Search failed — check your internet connection.";
+  }
 }
 
 function render(){
   const screen = document.getElementById('screen');
   const navbar = document.getElementById('navbar');
   navbar.style.display = (state.view==='permission') ? 'none' : 'flex';
-  screen.innerHTML = '';
-  navbar.innerHTML = '';
+  screen.innerHTML=''; navbar.innerHTML='';
 
-  if(state.view === 'permission'){ renderPermission(screen); return; }
-  if(state.view === 'changeLocation'){ renderChangeLocation(screen); }
-  if(state.view === 'home'){ renderHome(screen); }
-  if(state.view === 'nearby'){ renderNearby(screen); }
-  if(state.view === 'detail'){ renderDetail(screen); }
-  if(state.view === 'emergency'){ renderEmergency(screen); }
-  if(state.view === 'search'){ renderSearch(screen); }
+  if(state.view==='permission'){ renderPermission(screen); return; }
+  if(state.view==='changeLocation'){ renderChangeLocation(screen); }
+  if(state.view==='home'){ renderHome(screen); }
+  if(state.view==='nearby'){ renderNearby(screen); }
+  if(state.view==='detail'){ renderDetail(screen); }
+  if(state.view==='emergency'){ renderEmergency(screen); }
+  if(state.view==='search'){ renderSearch(screen); }
   renderNav(navbar);
 }
 
 function renderPermission(el){
   el.innerHTML = `
-    <div class="pad" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:6px;">
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:6px; padding:20px;">
       <div class="pin-badge">${ICONS.pin}</div>
       <h2>Find hospitals near you</h2>
       <p style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; max-width:270px; margin-top:8px;">
-        SehatNear uses your location to show verified hospitals nearby, with distance, departments and directions.
+        Live hospital locations come from OpenStreetMap. Where a phone number or hours aren't mapped, we say so — never a guess.
       </p>
       <div style="width:100%; max-width:280px; display:flex; flex-direction:column; gap:10px; margin-top:26px;">
         <button class="btn btn-primary" onclick="requestLocation()">Allow location</button>
-        <button class="btn btn-outline" onclick="goto('changeLocation')">Choose city manually</button>
+        <button class="btn btn-outline" onclick="goto('changeLocation')">Enter a city instead</button>
       </div>
     </div>`;
 }
 
 function renderChangeLocation(el){
-  const opts = Object.keys(CITIES).map(k=>`
-    <div class="cityopt ${state.cityKey===k?'sel':''}" onclick="chooseCity('${k}')">
-      <span style="font-weight:600; font-size:14px;">${CITIES[k].label}</span>
-      ${state.cityKey===k?'<span class="link">Selected</span>':''}
+  const quick = Object.keys(QUICK_CITIES).map(k=>`
+    <div class="cityopt" onclick="chooseQuickCity('${k}')">
+      <span style="font-weight:600; font-size:14px;">${QUICK_CITIES[k].label}</span>
+      <span class="link">Use this</span>
     </div>`).join('');
   el.innerHTML = `
     <div class="backbar">
-      ${state.cityKey ? `<div class="bk" onclick="goto('home')">${ICONS.chevronLeft}</div>` : ''}
-      <h3>Choose your city</h3>
+      ${state.cityLabel ? `<div class="bk" onclick="goto('home')">${ICONS.chevronLeft}</div>` : ''}
+      <h3>Set your location</h3>
     </div>
-    ${state.locateFailed ? `<div class="disclaimer">Couldn't read your location — this can happen if location access was declined or is unavailable in this preview window. Pick a city below to continue.</div>` : `<p style="padding:0 20px; font-size:12.5px; color:var(--ink-faint);">Demo covers 3 cities for now.</p>`}
-    <div class="citylist">${opts}</div>
+    ${state.locateFailed ? `<div class="disclaimer">Couldn't read GPS location — permission may have been declined. Type a city/area below, or pick a quick option.</div>` : ''}
+    <div class="searchbox" style="margin-top:12px;">
+      ${ICONS.search}<input id="geocodeInput" placeholder="Type any Indian city or area" />
+      <span class="link" style="font-size:12.5px;" onclick="geocodeAndGo()">Go</span>
+    </div>
+    <p id="geocodeStatus" style="padding:6px 20px 0; font-size:12px; color:var(--ink-faint);"></p>
+    <div class="section-label">Or quick pick</div>
+    <div class="citylist">${quick}</div>
   `;
 }
 
@@ -373,88 +297,78 @@ function renderNav(el){
   `;
 }
 
+function loadingBlock(){
+  return `<div class="loader"><div class="spinner"></div><p style="font-size:12.5px; color:var(--ink-faint);">Loading live hospitals from OpenStreetMap…</p></div>`;
+}
+
+function errorBlock(){
+  return `<div class="errbox">
+    <span>${state.loadError}</span>
+    <button class="btn btn-outline btn-sm" style="align-self:flex-start;" onclick="loadHospitals()">Retry</button>
+  </div>`;
+}
+
 function renderHome(el){
-  const city = CITIES[state.cityKey];
   el.innerHTML = `
     <div class="loc-row">
       <div class="loc-left">${ICONS.pin}
-        <div><div class="city">${city.label}</div><div class="sub">Showing hospitals near you</div></div>
+        <div><div class="city">${state.cityLabel || 'Locating…'}</div><div class="sub">${state.hospitals.length} hospitals found nearby</div></div>
       </div>
       <span class="link" style="font-size:12.5px;" onclick="goto('changeLocation')">Change</span>
     </div>
-
     <div class="sos" onclick="goto('emergency')">
       <div class="row">${ICONS.siren}<span class="label">Emergency</span></div>
-      <div class="desc">Tap to find the nearest 24x7 hospitals, directions and ambulance information.</div>
+      <div class="desc">Tap to find the nearest hospitals and get directions right now.</div>
     </div>
-
     <div class="grid2">
-      <div class="tile" onclick="goto('nearby')">
-        <div class="ic">${ICONS.hospital}</div>
-        <div><div class="t">Nearby hospitals</div><div class="s">Sorted by distance</div></div>
-      </div>
-      <div class="tile" onclick="goto('nearby')">
-        <div class="ic">${ICONS.doctor}</div>
-        <div><div class="t">Find doctor</div><div class="s">By department</div></div>
-      </div>
-      <div class="tile" onclick="goto('search')">
-        <div class="ic">${ICONS.search}</div>
-        <div><div class="t">Search hospital</div><div class="s">By name or area</div></div>
-      </div>
-      <div class="tile" onclick="goto('changeLocation')">
-        <div class="ic">${ICONS.pin}</div>
-        <div><div class="t">Change location</div><div class="s">Switch city</div></div>
-      </div>
+      <div class="tile" onclick="goto('nearby')"><div class="ic">${ICONS.hospital}</div><div><div class="t">Nearby hospitals</div><div class="s">Live from OpenStreetMap</div></div></div>
+      <div class="tile" onclick="goto('search')"><div class="ic">${ICONS.search}</div><div><div class="t">Search hospital</div><div class="s">By name or area</div></div></div>
+      <div class="tile" onclick="goto('changeLocation')"><div class="ic">${ICONS.pin}</div><div><div class="t">Change location</div><div class="s">Type any city</div></div></div>
+      <div class="tile" onclick="loadHospitals()"><div class="ic">${ICONS.map}</div><div><div class="t">Refresh data</div><div class="s">Re-fetch nearby list</div></div></div>
     </div>
-
     <div class="section-label">Closest to you</div>
-    ${hospitalsSorted(state.cityKey, state.userLat, state.userLng).slice(0,3).map(hospitalCard).join('')}
-    <div class="footnote">Demo directory. A production build would sync from a verified/official hospital source and let hospitals claim and update their own listing.</div>
+    ${state.loading ? loadingBlock() : state.loadError ? errorBlock() : hospitalsSorted().slice(0,3).map(hospitalCard).join('') || `<p style="padding:0 20px; font-size:13px; color:var(--ink-faint);">No hospitals found on OpenStreetMap in this area.</p>`}
+    <div class="footnote">Hospital locations and any phone/hours shown are pulled live from OpenStreetMap. Coverage depends on community mapping — always confirm by phone before relying on this in an emergency.</div>
   `;
 }
 
-function callHospital(phone){
-  window.location.href = `tel:${phone.replace(/[^0-9+]/g,'')}`;
-}
-
-function openDirections(lat, lng){
-  window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
-}
-
 function hospitalCard(h){
+  const phoneBtn = h.phone
+    ? `<a class="btn btn-ghost btn-sm" href="tel:${h.phone}">${ICONS.call}&nbsp; ${h.phone}</a>`
+    : `<span class="btn btn-disabled btn-sm">${ICONS.call}&nbsp; No number listed</span>`;
   return `
-    <div class="hcard" onclick='openDetail(${JSON.stringify(h.name)})'>
-      <div class="top">
+    <div class="hcard">
+      <div class="top" style="cursor:pointer;" onclick='openDetail(${JSON.stringify(h.id)})'>
         <div>
           <div class="name">${h.name}</div>
-          <div class="area">${h.area}</div>
-          ${h.er ? `<div class="badge">24x7 emergency</div>` : ''}
+          ${h.address ? `<div class="area">${h.address}</div>` : `<div class="area">Address not mapped</div>`}
+          ${h.emergency===true ? `<div class="badge er">Marked 24x7 on map</div>` : h.emergency===false ? `<div class="badge unconfirmed">No 24x7 emergency listed</div>` : `<div class="badge unconfirmed">Hours unconfirmed</div>`}
         </div>
         <div class="dist">${h.dist.toFixed(1)} km</div>
       </div>
       <div class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); callHospital('${h.phone}')">${ICONS.call}&nbsp; Help desk</button>
-        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); openDirections(${h.lat}, ${h.lng})">${ICONS.map}&nbsp; Directions</button>
+        ${phoneBtn}
+        <a class="btn btn-outline btn-sm" href="${directionsUrl(h.lat,h.lng)}" target="_blank" rel="noopener">${ICONS.map}&nbsp; Directions</a>
       </div>
     </div>`;
 }
 
-function openDetail(name){
-  const h = hospitalsSorted(state.cityKey, state.userLat, state.userLng).find(x=>x.name===name);
+function openDetail(id){
+  const h = hospitalsSorted().find(x=>x.id===id);
   goto('detail', { selected:h });
 }
 
 function renderNearby(el){
-  const list = hospitalsSorted(state.cityKey, state.userLat, state.userLng);
   el.innerHTML = `
     <div class="backbar"><h3>Hospitals near you</h3></div>
-    <p style="padding:0 20px 12px; font-size:12.5px; color:var(--ink-faint);">${CITIES[state.cityKey].label} · ${list.length} results</p>
-    ${list.map(hospitalCard).join('')}
+    <p style="padding:0 20px 12px; font-size:12.5px; color:var(--ink-faint);">${state.cityLabel || ''} · live from OpenStreetMap</p>
+    ${state.loading ? loadingBlock() : state.loadError ? errorBlock() : hospitalsSorted().map(hospitalCard).join('') || `<p style="padding:0 20px; font-size:13px; color:var(--ink-faint);">No hospitals found nearby on OpenStreetMap.</p>`}
   `;
 }
 
 function renderDetail(el){
   const h = state.selected;
+  if(!h){ goto('nearby'); return; }
   el.innerHTML = `
     <div class="backbar" style="border-bottom:1px solid var(--line); padding-bottom:16px;">
       <div class="bk" onclick="goto('nearby')">${ICONS.chevronLeft}</div>
@@ -462,68 +376,56 @@ function renderDetail(el){
     </div>
     <div class="detail-hero">
       <h2 style="font-size:20px;">${h.name}</h2>
-      <p style="font-size:13px; color:var(--ink-faint); margin-top:4px;">${h.area}, ${CITIES[state.cityKey].label}</p>
+      <p style="font-size:13px; color:var(--ink-faint); margin-top:4px;">${h.address || 'Address not mapped'}</p>
       <div class="chiprow">
-        ${h.er ? `<span class="chip">24x7 emergency</span>` : ''}
         <span class="chip">${h.dist.toFixed(1)} km away</span>
-        <span class="chip">${h.hours}</span>
+        ${h.emergency===true ? `<span class="chip">24x7 emergency (per map data)</span>` : `<span class="chip muted">Emergency status unconfirmed</span>`}
+        ${h.hours ? `<span class="chip">${h.hours}</span>` : `<span class="chip muted">Hours not mapped</span>`}
       </div>
     </div>
     <div class="infoblock">
-      <div class="row"><span class="k">Help desk</span><span class="v">${h.phone}</span></div>
-      <div class="row"><span class="k">Hours</span><span class="v">${h.hours}</span></div>
+      <div class="row"><span class="k">Phone</span><span class="v">${h.phone || 'Not listed on map'}</span></div>
+      <div class="row"><span class="k">Source</span><span class="v">OpenStreetMap</span></div>
+      ${h.website ? `<div class="row"><span class="k">Website</span><span class="v"><a href="${h.website}" target="_blank" rel="noopener">${h.website}</a></span></div>` : ''}
     </div>
-    <div class="infoblock">
-      <p style="font-size:12.5px; color:var(--ink-faint); font-weight:600; margin-bottom:2px;">Departments</p>
-      <div class="chiprow">${h.depts.map(d=>`<span class="chip">${d}</span>`).join('')}</div>
+    <div style="padding:20px; display:flex; flex-direction:column; gap:10px;">
+      ${h.phone ? `<a class="btn btn-primary" href="tel:${h.phone}">${ICONS.call}&nbsp; Call ${h.phone}</a>` : `<span class="btn btn-disabled">${ICONS.call}&nbsp; No phone number mapped</span>`}
+      <a class="btn btn-outline" href="${directionsUrl(h.lat,h.lng)}" target="_blank" rel="noopener">${ICONS.map}&nbsp; Get directions</a>
     </div>
-    <div class="pad" style="display:flex; flex-direction:column; gap:10px;">
-      <button class="btn btn-primary" onclick="callHospital('${h.phone}')">${ICONS.call}&nbsp; Call help desk</button>
-      <button class="btn btn-outline" onclick="openDirections(${h.lat}, ${h.lng})">${ICONS.map}&nbsp; Get directions</button>
-    </div>
-    <div class="footnote">Demo listing — name, phone and hours are placeholders for this prototype, not a real hospital.</div>
+    <div class="footnote">This listing comes directly from OpenStreetMap's public map data, not a verified hospital registry. If a detail looks wrong, it can be corrected at openstreetmap.org.</div>
   `;
 }
 
 function renderEmergency(el){
-  const list = hospitalsSorted(state.cityKey, state.userLat, state.userLng);
   el.innerHTML = `
     <div class="backbar"><h3>Emergency</h3></div>
-    <div class="disclaimer"><strong>This is a design prototype, not a live emergency service.</strong> In a real emergency in India, call 112 (all emergencies) or 102 (ambulance) directly.</div>
+    <div class="disclaimer"><strong>In a real emergency in India, call 112 (all emergencies) or 102 (ambulance) first.</strong> The list below is live map data, not a guaranteed-accurate emergency directory.</div>
     <p style="padding:0 20px 6px; font-size:12.5px; color:var(--ink-faint);">Nearest hospitals, closest first</p>
-    ${list.slice(0,4).map(h=>`
-      <div class="hcard" onclick='openDetail(${JSON.stringify(h.name)})'>
-        <div class="top">
-          <div>
-            <div class="name">${h.name}</div>
-            <div class="area">${h.area}</div>
-            ${h.er ? `<div class="badge">24x7 emergency</div>` : `<div class="badge" style="background:var(--teal-wash); color:var(--teal-dark);">OPD hours only</div>`}
-          </div>
-          <div class="dist">${h.dist.toFixed(1)} km</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-red btn-sm" onclick="event.stopPropagation(); callHospital('${h.phone}')">${ICONS.call}&nbsp; Help desk</button>
-          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); openDirections(${h.lat}, ${h.lng})">${ICONS.map}&nbsp; Directions</button>
-        </div>
-      </div>`).join('')}
-    <div class="footnote">Ambulance information is shown only where a hospital has officially published it. This demo does not dispatch ambulances.</div>
+    ${state.loading ? loadingBlock() : state.loadError ? errorBlock() : hospitalsSorted().slice(0,5).map(hospitalCard).join('')}
   `;
 }
 
 function renderSearch(el){
-  const all = hospitalsSorted(state.cityKey, state.userLat, state.userLng);
   const q = state.query.trim().toLowerCase();
-  const filtered = q ? all.filter(h=>h.name.toLowerCase().includes(q) || h.area.toLowerCase().includes(q)) : all;
+  const list = hospitalsSorted();
+  const filtered = q ? list.filter(h=>h.name.toLowerCase().includes(q) || (h.address||'').toLowerCase().includes(q)) : list;
   el.innerHTML = `
     <div class="backbar"><h3>Search hospitals</h3></div>
     <div class="searchbox">${ICONS.search}<input id="searchInput" placeholder="Search by name or area" value="${state.query}" /></div>
-    <div class="section-label">${filtered.length} result${filtered.length===1?'':'s'} in ${CITIES[state.cityKey].label}</div>
-    ${filtered.map(hospitalCard).join('') || `<p style="padding:0 20px; font-size:13px; color:var(--ink-faint);">No hospitals match that search.</p>`}
+    ${state.loading ? loadingBlock() : state.loadError ? errorBlock() : `
+      <div class="section-label">${filtered.length} result${filtered.length===1?'':'s'}</div>
+      ${filtered.map(hospitalCard).join('') || `<p style="padding:0 20px; font-size:13px; color:var(--ink-faint);">No hospitals match that search.</p>`}
+    `}
   `;
-  const input = document.getElementById('searchInput');
-  input.focus();
-  input.setSelectionRange(input.value.length, input.value.length);
-  input.addEventListener('input', e=>{ state.query = e.target.value; render(); });
+  if(!state.loading && !state.loadError){
+    const input = document.getElementById('searchInput');
+    input.focus(); input.setSelectionRange(input.value.length, input.value.length);
+    input.addEventListener('input', e=>{ state.query = e.target.value; render(); });
+  }
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(()=>{}); });
 }
 
 render();
