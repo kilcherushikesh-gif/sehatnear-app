@@ -258,7 +258,7 @@ const HOSPITALS = {
 // Then call: fetch(`${BACKEND_URL}/api/hospitals/nearby?lat=${lat}&lng=${lng}`)
 // and map the response's `results` array into the same shape hospitalsSorted() returns.
 // Left blank here so the prototype keeps working standalone with no backend running.
-  const BACKEND_URL = "https://sehatnear-app.onrender.com";
+const BACKEND_URL = "";
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -413,6 +413,14 @@ function renderHome(el){
   `;
 }
 
+function callHospital(phone){
+  window.location.href = `tel:${phone.replace(/[^0-9+]/g,'')}`;
+}
+
+function openDirections(lat, lng){
+  window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+}
+
 function hospitalCard(h){
   return `
     <div class="hcard" onclick='openDetail(${JSON.stringify(h.name)})'>
@@ -425,8 +433,8 @@ function hospitalCard(h){
         <div class="dist">${h.dist.toFixed(1)} km</div>
       </div>
       <div class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">${ICONS.call}&nbsp; Help desk</button>
-        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation()">${ICONS.map}&nbsp; Directions</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); callHospital('${h.phone}')">${ICONS.call}&nbsp; Help desk</button>
+        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); openDirections(${h.lat}, ${h.lng})">${ICONS.map}&nbsp; Directions</button>
       </div>
     </div>`;
 }
@@ -470,8 +478,8 @@ function renderDetail(el){
       <div class="chiprow">${h.depts.map(d=>`<span class="chip">${d}</span>`).join('')}</div>
     </div>
     <div class="pad" style="display:flex; flex-direction:column; gap:10px;">
-      <button class="btn btn-primary">${ICONS.call}&nbsp; Call help desk</button>
-      <button class="btn btn-outline">${ICONS.map}&nbsp; Get directions</button>
+      <button class="btn btn-primary" onclick="callHospital('${h.phone}')">${ICONS.call}&nbsp; Call help desk</button>
+      <button class="btn btn-outline" onclick="openDirections(${h.lat}, ${h.lng})">${ICONS.map}&nbsp; Get directions</button>
     </div>
     <div class="footnote">Demo listing — name, phone and hours are placeholders for this prototype, not a real hospital.</div>
   `;
@@ -494,8 +502,8 @@ function renderEmergency(el){
           <div class="dist">${h.dist.toFixed(1)} km</div>
         </div>
         <div class="actions">
-          <button class="btn btn-red btn-sm" onclick="event.stopPropagation()">${ICONS.call}&nbsp; Help desk</button>
-          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation()">${ICONS.map}&nbsp; Directions</button>
+          <button class="btn btn-red btn-sm" onclick="event.stopPropagation(); callHospital('${h.phone}')">${ICONS.call}&nbsp; Help desk</button>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); openDirections(${h.lat}, ${h.lng})">${ICONS.map}&nbsp; Directions</button>
         </div>
       </div>`).join('')}
     <div class="footnote">Ambulance information is shown only where a hospital has officially published it. This demo does not dispatch ambulances.</div>
