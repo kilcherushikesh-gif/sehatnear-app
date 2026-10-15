@@ -326,11 +326,17 @@ function errorBlock(){
   </div>`;
 }
 
+function hospitalStatus(){
+  if(state.loading) return "Finding nearby hospitals…";
+  if(state.loadError) return "Hospital data unavailable";
+  return `${state.hospitals.length} hospitals found nearby`;
+}
+
 function renderHome(el){
   el.innerHTML = `
     <div class="loc-row">
       <div class="loc-left">${ICONS.pin}
-        <div><div class="city">${state.cityLabel || 'Locating…'}</div><div class="sub">${state.hospitals.length} hospitals found nearby</div></div>
+        <div><div class="city">${state.cityLabel || 'Locating…'}</div><div class="sub">${hospitalStatus()}</div></div>
       </div>
       <span class="link" style="font-size:12.5px;" onclick="goto('changeLocation')">Change</span>
     </div>
